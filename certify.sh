@@ -1,14 +1,5 @@
 #!/bin/bash
 
-# Default Parameters
-DIRECTORY="https://acme-v02.api.letsencrypt.org/directory"
-DIRECTORY_STAGING="https://acme-staging-v02.api.letsencrypt.org/directory"
-CHAIN_URL="https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem"
-ACCOUNT_KEY="${PKI_DIR}/accounts/live.key"
-ACCOUNT_KEY_STAGING="${PKI_DIR}/accounts/staging.key"
-SSL_CONF="${PKI_DIR}/openssl.cnf"
-ACME_TINY="python ./acme-tiny/acme_tiny.py --quiet"
-
 # CLI options defaults
 ISSUE=false
 RENEW=false
@@ -17,6 +8,15 @@ DOMAIN=""
 ALT_DOMAINS=()
 PKI_DIR="/var/lib/certify/"
 ACME_DIR="/srv/http/acme-challenge/.well-known/acme-challenge/"
+
+# Default Parameters
+DIRECTORY="https://acme-v02.api.letsencrypt.org/directory"
+DIRECTORY_STAGING="https://acme-staging-v02.api.letsencrypt.org/directory"
+CHAIN_URL="https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem"
+ACCOUNT_KEY="${PKI_DIR}/accounts/live.key"
+ACCOUNT_KEY_STAGING="${PKI_DIR}/accounts/staging.key"
+SSL_CONF="${PKI_DIR}/openssl.cnf"
+ACME_TINY="python ./acme-tiny/acme_tiny.py --quiet"
 
 # Colors for logging
 RED='\033[0;31m'
@@ -165,6 +165,7 @@ function gen_csr() {
 		_logerr "Failed to generate csr for ${cn}! Purging ${csr}."
 		return 1
 	fi
+	mkdir -p $(dirname $csr)
 	echo "$req_tmp" > $csr
 	_logok "Generated csr for ${cn}."
 }
