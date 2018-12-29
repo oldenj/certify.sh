@@ -4,11 +4,10 @@
 DIRECTORY="https://acme-v02.api.letsencrypt.org/directory"
 DIRECTORY_STAGING="https://acme-staging-v02.api.letsencrypt.org/directory"
 CHAIN_URL="https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem"
-PKI_DIR="/data/pki/letsencrypt"
 ACCOUNT_KEY="${PKI_DIR}/accounts/live.key"
 ACCOUNT_KEY_STAGING="${PKI_DIR}/accounts/staging.key"
 SSL_CONF="${PKI_DIR}/openssl.cnf"
-ACME_TINY="python ./acme-tiny/acme_tiny.py --quiet"
+ACME_TINY="python /data/admin/scripts/acme-tiny/acme_tiny.py --quiet"
 
 # CLI options defaults
 ISSUE=false
@@ -16,6 +15,7 @@ RENEW=false
 STAGING=false
 DOMAIN=""
 ALT_DOMAINS=()
+PKI_DIR="/data/pki/letsencrypt"
 ACME_DIR="/srv/http/acme-challenge/.well-known/acme-challenge/"
 
 # Colors for logging
@@ -47,7 +47,7 @@ _log() {
 }
 
 _usage() {
-	echo -e "Usage: $0 <issue/renew> [-s/--staging] [-a/--acme-dir directory] [-d/--domains <SAN1>,<SAN2>,...] <domain>"
+	echo -e "Usage: $0 <issue/renew> [-s/--staging] [-a/--acme-dir CA directory URL] [-p/--pki-dir PKI directory] [-d/--domains <SAN1>,<SAN2>,...] <domain>"
 }
 
 function get_opts() {
@@ -56,8 +56,8 @@ function get_opts() {
 		_exiterr "`getopt --test` failed in this environment."
 	fi
 
-	OPTIONS=sad:
-	LONGOPTIONS=staging,acme-dir,domains:
+	OPTIONS=sapd:
+	LONGOPTIONS=staging,acme-dir,pki-dir,domains:
 
 	parsed=$(getopt --options=$OPTIONS --longoptions=$LONGOPTIONS --name "$0" -- "$@")
 	if [[ $? -ne 0 ]]; then
@@ -80,6 +80,10 @@ function get_opts() {
 				;;
 			-a|--acme-dir)
 				ACME_DIR=$2
+				shift 2
+				;;
+			-p|--pki-dir)
+				PKI_DIR=$2
 				shift 2
 				;;
 			--)
