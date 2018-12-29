@@ -7,7 +7,7 @@ CHAIN_URL="https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem"
 ACCOUNT_KEY="${PKI_DIR}/accounts/live.key"
 ACCOUNT_KEY_STAGING="${PKI_DIR}/accounts/staging.key"
 SSL_CONF="${PKI_DIR}/openssl.cnf"
-ACME_TINY="python /data/admin/scripts/acme-tiny/acme_tiny.py --quiet"
+ACME_TINY="python ./acme-tiny/acme_tiny.py --quiet"
 
 # CLI options defaults
 ISSUE=false
@@ -91,7 +91,7 @@ function get_opts() {
 				break
 				;;
 			*)
-				err "Programming error!"
+				_exiterr "Programming error!"
 				exit 1
 				;;
 		esac
