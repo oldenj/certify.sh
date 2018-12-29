@@ -1,0 +1,34 @@
+[ req ]
+# Options for the `req` tool (`man req`).
+default_bits        = 2048
+distinguished_name  = req_distinguished_name
+string_mask         = utf8only
+
+# SHA-1 is deprecated, so use SHA-2 instead.
+default_md          = sha256
+
+# Extension to add when the -x509 option is used.
+x509_extensions     = v3_ca
+
+[ req_distinguished_name ]
+# See <https://en.wikipedia.org/wiki/Certificate_signing_request>.
+countryName                     =
+stateOrProvinceName             =
+localityName                    =
+0.organizationName              =
+organizationalUnitName          =
+commonName                      =
+emailAddress                    =
+
+# Optionally, specify some defaults.
+countryName_default             =
+stateOrProvinceName_default     =
+localityName_default            =
+0.organizationName_default      =
+organizationalUnitName_default  =
+emailAddress_default            =
+
+[ v3_ca ]
+subjectKeyIdentifier=hash
+authorityKeyIdentifier=keyid:always,issuer:always
+basicConstraints = critical, CA:true
