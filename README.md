@@ -8,6 +8,8 @@ renewal of all existing certificates and subject alternative names (SAN) to cove
 # Requirements
 The script uses **curl** to fetch the Letsencrypt intermediary certificate.
 
+There has to be a webserver ready to serve the challenge files.
+
 The script also requires an OpenSSL configuration file to generate the certificate signing requests.
 
 PKI_DIR/openssl.cnf
