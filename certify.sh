@@ -15,7 +15,7 @@ RENEW=false
 STAGING=false
 DOMAIN=""
 ALT_DOMAINS=()
-PKI_DIR="/data/pki/letsencrypt"
+PKI_DIR="/etc/certify/letsencrypt"
 ACME_DIR="/srv/http/acme-challenge/.well-known/acme-challenge/"
 
 # Colors for logging
