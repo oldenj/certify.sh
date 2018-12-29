@@ -12,6 +12,8 @@ There has to be a webserver ready to serve the challenge files.
 
 The script also requires an OpenSSL configuration file to generate the certificate signing requests.
 
+For Arch Linux, a PKGBUILD is available at https://github.com/oldenj/certify.sh-release.
+
 PKI_DIR/openssl.cnf
 ```
 [ req ]
