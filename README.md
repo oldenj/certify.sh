@@ -7,4 +7,5 @@ renewal of all existing certificates and subject alternative names (SAN) to cove
 
 # Usage
 certify issue [-s/--staging] [-a/--acme-dir CA directory URL] [-p/--pki-dir PKI directory] [-d/--domains <SAN1>,<SAN2>,...] <domain>
+  
 certify renew [-s/--staging] [-a/--acme-dir CA directory URL] [-p/--pki-dir PKI directory]
