@@ -12,7 +12,6 @@ ACME_DIR="/srv/http/acme-challenge/.well-known/acme-challenge/"
 # Default Parameters
 DIRECTORY="https://acme-v02.api.letsencrypt.org/directory"
 DIRECTORY_STAGING="https://acme-staging-v02.api.letsencrypt.org/directory"
-CHAIN_URL="https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem"
 ACCOUNT_KEY="${PKI_DIR}/accounts/live.key"
 ACCOUNT_KEY_STAGING="${PKI_DIR}/accounts/staging.key"
 SSL_CONF="${PKI_DIR}/openssl.cnf"
@@ -129,11 +128,11 @@ function gen_csr() {
 	fi
 	if $STAGING; then
 		work_dir="${PKI_DIR}/staging/${1}"
-		domain_key="${work_dir}/domainkey.pem"
+		domain_key="${work_dir}/key.pem"
 		csr="${PKI_DIR}/csr/${1}.csr.staging"
 	else
 		work_dir="${PKI_DIR}/live/${1}"
-		domain_key="${work_dir}/domainkey.pem"
+		domain_key="${work_dir}/key.pem"
 		csr="${PKI_DIR}/csr/${1}.csr"
 	fi
 
@@ -207,20 +206,6 @@ function sign() {
 			fi
 			echo "$cert_data" > $cert
 			_logok "ACME completed. Received signed certificate for ${dom}."
-
-			# Get intermediate CA certificate
-			retries=3
-			while [ ! -e $chain ] && [ $retries -gt 0 ]; do
-				result=$(wget -q -O - ${CHAIN_URL} > "${chain}" 2>&1)
-				retries=$[$retries-1]
-			done
-			if [ ! -e $chain ]; then
-				_logerr "Failed to receive intermediate certificate."
-				_log $result
-				continue
-			fi
-			cat ${cert} ${chain} > ${fullchain}
-			_logok "Created full chain for ${dom}."
 		fi
 	done
 }
