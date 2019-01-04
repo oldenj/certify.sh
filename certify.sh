@@ -15,7 +15,7 @@ DIRECTORY_STAGING="https://acme-staging-v02.api.letsencrypt.org/directory"
 ACCOUNT_KEY="${PKI_DIR}/accounts/live.key"
 ACCOUNT_KEY_STAGING="${PKI_DIR}/accounts/staging.key"
 SSL_CONF="/var/lib/certify/openssl.cnf"
-ACME_TINY="python /var/lib/certify/acme-tiny/acme_tiny.py --quiet"
+ACME_TINY="acme-tiny --quiet"
 
 # Colors for logging
 RED='\033[0;31m'
