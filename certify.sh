@@ -46,55 +46,35 @@ _log() {
 }
 
 _usage() {
-	echo -e "Usage: $0 <issue/renew> [-s/--staging] [-a/--acme-dir Directory hosting challenge files] [-p/--pki-dir PKI directory] [-d/--domains <SAN1>,<SAN2>,...] <domain>"
+	echo -e "Usage: $0  [-s/--staging] [-a/--acme-dir Directory hosting challenge files] [-p/--pki-dir PKI directory] [-d/--domains <SAN1>,<SAN2>,...] <domain>"
 }
 
 function get_opts() {
-	getopt --test > /dev/null
-	if [[ $? -ne 4 ]]; then
-		_exiterr "`getopt --test` failed in this environment."
-	fi
+	OPTIND=1
+	OPTERR=0
 
-	OPTIONS=sapd:
-	LONGOPTIONS=staging,acme-dir,pki-dir,domains:
-
-	parsed=$(getopt --options=$OPTIONS --longoptions=$LONGOPTIONS --name "$0" -- "$@")
-	if [[ $? -ne 0 ]]; then
-		_usage
-		exit 1
-	fi
-
-	eval set -- "$parsed"
-
-	while true; do
-		case "$1" in
-			-s|--staging)
+	while getopts "sd:a:p:h" opt; do
+		case "$opt" in
+			s)
 				STAGING=true
-				shift
 				;;
-			-d|--domains)
-				tmp=$(echo "$2" | sed -r 's/[,]+/ /g')
+			d)
+				tmp=$(echo "$OPTARG" | sed -r 's/[,]+/ /g')
 				read -r -a ALT_DOMAINS <<< $tmp
-				shift 2
 				;;
-			-a|--acme-dir)
-				ACME_DIR=$2
-				shift 2
+			a)
+				ACME_DIR=$OPTARG
 				;;
-			-p|--pki-dir)
-				PKI_DIR=$2
-				shift 2
+			p)
+				PKI_DIR=$OPTARG
 				;;
-			--)
-				shift
-				break
-				;;
-			*)
-				_exiterr "Programming error!"
-				exit 1
+			h)
+				_usage
 				;;
 		esac
 	done
+
+	shift $((OPTIND-1))
 
 	# handle non-option arguments
 	if [[ $# -lt 1 ]]; then
