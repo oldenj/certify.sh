@@ -14,8 +14,8 @@ DIRECTORY="https://acme-v02.api.letsencrypt.org/directory"
 DIRECTORY_STAGING="https://acme-staging-v02.api.letsencrypt.org/directory"
 ACCOUNT_KEY="${PKI_DIR}/accounts/live.key"
 ACCOUNT_KEY_STAGING="${PKI_DIR}/accounts/staging.key"
-SSL_CONF="${PKI_DIR}/openssl.cnf"
-ACME_TINY="python ./acme-tiny/acme_tiny.py --quiet"
+SSL_CONF="/var/lib/certify/openssl.cnf"
+ACME_TINY="python /var/lib/certify/acme-tiny/acme_tiny.py --quiet"
 
 # Colors for logging
 RED='\033[0;31m'
@@ -46,7 +46,7 @@ _log() {
 }
 
 _usage() {
-	echo -e "Usage: $0 <issue/renew> [-s/--staging] [-a/--acme-dir CA directory URL] [-p/--pki-dir PKI directory] [-d/--domains <SAN1>,<SAN2>,...] <domain>"
+	echo -e "Usage: $0 <issue/renew> [-s/--staging] [-a/--acme-dir Directory hosting challenge files] [-p/--pki-dir PKI directory] [-d/--domains <SAN1>,<SAN2>,...] <domain>"
 }
 
 function get_opts() {
