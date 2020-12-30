@@ -163,7 +163,10 @@ function sign() {
 			cert_data="$(${ACME_TINY} --directory-url "$DIRECTORY_STAGING" --account-key "$ACCOUNT_KEY_STAGING" --csr "$csr" --acme-dir "$ACME_DIR")"
 			if [ $? -ne 0 ] || [ -z "${cert_data}" ]; then
 				_logerr "ACME failed for ${dom}!"
-				rm -f $csr
+				if [ "$MODE" == "issue" ]; then
+					_logwarn "Cleaning up CSR for ${dom}!"
+					rm -f $csr
+				fi
 				continue
 			fi
 			echo "$cert_data" > $cert
@@ -225,7 +228,7 @@ get_opts $@
 check_environment || _exiterr "Missing environment files."
 if [ "$MODE" == "issue" ]; then
 	gen_csr ${DOMAIN} ${ALT_DOMAINS[@]} || _exiterr "Failed to generate csr."
-	sign ${DOMAIN[0]} true || _exiterr "Failed to obtain signed certificate."
+	sign ${DOMAIN[0]} || _exiterr "Failed to obtain signed certificate."
 elif [ "$MODE" == "renew" ]; then
 	csr_l=()
 	for csr in ${PKI_DIR}/csr/*.csr; do
